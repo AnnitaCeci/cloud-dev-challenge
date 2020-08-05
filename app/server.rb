@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'rubygems'
 require 'aws-record'
+require 'active_model'
 require_relative "models/landpage_lead.rb"
 require_relative "controllers/landpage_lead_controller.rb"
 

@@ -77,9 +77,11 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
+                                
                                 <input type="text" class="form-control-input" id="glastname" required>
                                 <label class="label-control" for="glastname">Last Name</label>
                                 <div class="help-block with-errors"></div>
+                      
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control-input" id="gphone" required>
@@ -87,9 +89,9 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control-input" id="gemail" required>
+                                <input type="text" class="form-control-input" id="gemail"  required>
                                 <label class="label-control" for="gemail">Email</label>
-                                <div class="help-block with-errors"></div>
+                                <div id="emailOK" class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control-input" id="gcompany" required>
@@ -210,6 +212,7 @@
     <script>
     $(document).ready(function() {
 
+
       $("#getEbookForm").submit(function(e){
         e.preventDefault();
         let fdata = {}
@@ -236,6 +239,7 @@
             },
             error : function(callback){
                 console.log("Error saving data");
+                console.log(callback);
                 gformError();
                 gsubmitMSG(false, callback);
             }
@@ -264,7 +268,19 @@
             var msgClasses = "h3 text-center";
         }
         $("#gmsgSubmit").removeClass().addClass(msgClasses).text(msg);
-	}
+    }
+    
+    document.getElementById('gemail').addEventListener('input', function() {
+        campo = event.target;
+        valido = document.getElementById('emailOK');
+            
+        emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+        if (emailRegex.test(campo.value)) {
+          valido.innerText = "email válido";
+        } else {
+          valido.innerText = "email incorrecto";
+        }
+    });
     
     </script>
     

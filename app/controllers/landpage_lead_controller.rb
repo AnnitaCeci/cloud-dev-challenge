@@ -3,10 +3,13 @@ class LandpageLeadController
 
     def self.list
         items = LandpageLeads.scan()
+
+        puts items.to_s
         items
           .map { |r| { :first_name => r.first_name, :last_name => r.last_name,:email => r.email, :phone => r.phone, :company_name => r.company_name, :company_industry => r.company_industry } }
           .sort { |a, b| a[:created_at] <=> b[:created_at] }
           .to_json
+
     end
 
     def self.create(params)
