@@ -11,6 +11,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref LeadsTable 
+            TableName: !Ref MessagesTable
       CodeUri: "./"
       MemorySize: 512
       Timeout: 30
@@ -65,6 +66,36 @@ Resources:
       PrimaryKey: 
         Name: id
         Type: String
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+  MessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions: 
+        - 
+          AttributeName: "ID"
+          AttributeType: "S"
+        - 
+          AttributeName: "email"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "ID"
+          KeyType: "HASH"
+      TableName: ContactMessages
+      GlobalSecondaryIndexes: 
+        - 
+          IndexName: "emailIndex"
+          KeySchema: 
+            - 
+              AttributeName: "email"
+              KeyType: "HASH"
+          Projection: 
+            ProjectionType: "KEYS_ONLY"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
       ProvisionedThroughput: 
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
