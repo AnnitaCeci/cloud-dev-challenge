@@ -24,16 +24,21 @@ def self.create(params)
 end
 
 def self.get(id)
-    message = ContactMessages.query(key_condition_expression: "#H = :h",
-    expression_attribute_names: {
-      "#H" => "ID"
-    },
-    expression_attribute_values: {
-      ":h" => id
-    }).map { |r| { :content => r.content } }.to_json
+    begin
+        message = ContactMessages.query(key_condition_expression: "#H = :h",
+        expression_attribute_names: {
+        "#H" => "ID"
+        },
+        expression_attribute_values: {
+        ":h" => id
+        }).map { |r| { :content => r.content } }.to_json
+    rescue  Aws::DynamoDB::Errors::ServiceError => error
+        puts "Unable to query table:"
+        puts "#{error.message}"
+    end
 end
 
-def self.get_all(email)  
+def self.get_all(email)    
     message = ContactMessages.scan(filter_expression: "#H = :h",
     expression_attribute_names: {
       "#H" => "email"
