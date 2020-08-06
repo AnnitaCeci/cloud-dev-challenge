@@ -19,6 +19,6 @@ class LandpageLeads
     epoch_time_attr :created_at
     epoch_time_attr :updated_at
 
-    validates_presence_of :last_name, :first_name, :phone, :email, :company_name, :company_industry, :message => "empty fields"
-    validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, :message => "email invalid"
+    validates_presence_of :first_name, :email, :message => "empty fields"
+    validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   end

@@ -89,9 +89,9 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control-input" id="gemail"  required>
+                                <input type="email" class="form-control-input" id="gemail"  required>
                                 <label class="label-control" for="gemail">Email</label>
-                                <div id="emailOK" class="help-block with-errors"></div>
+                                <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control-input" id="gcompany" required>
@@ -162,7 +162,7 @@
                         </div>
                         <div class="form-message">
                             <div id="cmsgSubmit" class="h3 text-center hidden"></div>
-                        </div>
+                        </div>                        
                     </form>
                     <!-- end of contact form -->
 
@@ -246,6 +246,42 @@
         });
       });
     });
+
+    $(document).ready(function() {
+      $("#contactForm").submit(function(e){
+        e.preventDefault();
+        let fdata = {}
+        let cdata = {}
+
+		fdata["email"] = $("#cemail").val();
+		fdata["name"] = $("#cname").val();
+        fdata["content"] = $("#cmessage").val();
+       
+        var data_string =  "email=" + fdata["email"] + "&name=" + fdata["name"] + "&content=" + fdata["content"];
+
+        console.log(fdata);
+
+        $.ajax({
+            cache: false,
+            url : "/api/contact_messages",
+            type: "POST",
+            dataType : "json",
+            data : JSON.stringify(fdata),
+            success : function(callback){
+                console.log("Succsess");     
+                cformSuccess();      
+            },
+            error : function(callback){
+                console.log("Error saving data");
+                cformError();
+                csubmitMSG(false, callback);         
+            }
+        });
+
+        cdata["email"] = $("#cemail").val();
+		cdata["first_name"] = $("#cname").val();
+      });
+    });
     
 
     
@@ -269,6 +305,29 @@
         }
         $("#gmsgSubmit").removeClass().addClass(msgClasses).text(msg);
     }
+
+    
+    function cformSuccess() {
+        $("#contactForm")[0].reset();
+        csubmitMSG(true, "Congratulations, your message was send!");
+        $("input").removeClass('notEmpty'); // resets the field label after submission
+    }
+
+    function cformError() {
+        $("#contactForm").removeClass().addClass('shake animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass();
+        });
+	}
+
+    function csubmitMSG(valid, msg) {
+        if (valid) {
+            var msgClasses = "h3 text-center tada animated";
+        } else {
+            var msgClasses = "h3 text-center";
+        }
+        $("#cmsgSubmit").removeClass().addClass(msgClasses).text(msg);
+    }
+
     
     document.getElementById('gemail').addEventListener('input', function() {
         campo = event.target;
